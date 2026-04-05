@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ayurvedic Hair Oil</title>
+
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #f4f8f4;
+}
+
+/* Navbar */
+nav {
+  background: #2e7d32;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+}
+nav a {
+  color: white;
+  margin: 0 10px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* Sections */
+.section {
+  display: none;
+  padding: 20px;
+}
+.active {
+  display: block;
+}
+
+/* Products */
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.card {
+  background: white;
+  margin: 15px;
+  padding: 15px;
+  width: 220px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px gray;
+  text-align: center;
+}
+button {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  padding: 8px;
+  margin-top: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Cart */
+.cart-item {
+  background: white;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <h2>🌿 Hair Oil</h2>
+  <div>
+    <a onclick="showPage('home')">Home</a>
+    <a onclick="showPage('products')">Products</a>
+    <a onclick="showPage('cart')">Cart (<span id="cart-count">0</span>)</a>
+    <a onclick="showPage('about')">About</a>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="section active">
+  <h1>Welcome to Ayurvedic Hair Oil</h1>
+  <p>Natural Care for Strong & Healthy Hair 🌿</p>
+</div>
+
+<!-- PRODUCTS -->
+<div id="products" class="section">
+  <h2>Our Products</h2>
+
+  <div class="products">
+
+    <div class="card">
+      <h3>Hair Growth Oil</h3>
+      <p>₹299</p>
+      <button onclick="addToCart('Hair Growth Oil', 299)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <h3>Dandruff Control Oil</h3>
+      <p>₹249</p>
+      <button onclick="addToCart('Dandruff Oil', 249)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <h3>Shiny Hair Oil</h3>
+      <p>₹199</p>
+      <button onclick="addToCart('Shiny Oil', 199)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <h3>Onion Hair Oil</h3>
+      <p>₹349</p>
+      <button onclick="addToCart('Onion Oil', 349)">Add to Cart</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- CART -->
+<div id="cart" class="section">
+  <h2>Your Cart</h2>
+  <div id="cart-items"></div>
+  <h3>Total: ₹<span id="total">0</span></h3>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="section">
+  <h2>About Us</h2>
+  <p>We provide 100% natural Ayurvedic oils made using traditional methods.</p>
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function showPage(page) {
+  document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
+  renderCart();
+}
+
+function addToCart(name, price) {
+  cart.push({name, price});
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartCount();
+  alert(name + " added to cart!");
+}
+
+function updateCartCount() {
+  document.getElementById("cart-count").innerText = cart.length;
+}
+
+function renderCart() {
+  let container = document.getElementById("cart-items");
+  let total = 0;
+  container.innerHTML = "";
+
+  cart.forEach((item, index) => {
+    total += item.price;
+
+    container.innerHTML += `
+      <div class="cart-item">
+        ${item.name} - ₹${item.price}
+        <button onclick="removeItem(${index})">Remove</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("total").innerText = total;
+}
+
+function removeItem(index) {
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+  updateCartCount();
+}
+
+updateCartCount();
+</script>
+
+</body>
+</html>
